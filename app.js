@@ -1,7 +1,10 @@
 const state = {
     scripts: [],
     category: 'Wszystkie',
-    query: ''
+    query: '',
+    loaderConnected: false,
+    loaderVersion: null,
+    moduleSettings: {}
 };
 
 
@@ -36,16 +39,51 @@ const elements = {
 
 
 // ============================================================
+// CONFIG
+// ============================================================
+
+const LOADER_PING_INTERVAL =
+    3000;
+
+
+const LOADER_TIMEOUT =
+    1200;
+
+
+// ============================================================
 // START
 // ============================================================
 
 async function init() {
 
+    elements.status.textContent =
+        'Ładowanie bazy...';
+
+
+    setupLoaderBridge();
+
+
+    await loadManifest();
+
+
+    pingLoader();
+
+
+    setInterval(
+        pingLoader,
+        LOADER_PING_INTERVAL
+    );
+
+}
+
+
+// ============================================================
+// LOAD MANIFEST
+// ============================================================
+
+async function loadManifest() {
+
     try {
-
-        elements.status.textContent =
-            'Ładowanie bazy...';
-
 
         const response =
             await fetch(
@@ -66,8 +104,27 @@ async function init() {
         }
 
 
-        state.scripts =
+        const data =
             await response.json();
+
+
+        if (
+            !data
+            ||
+            !Array.isArray(
+                data.modules
+            )
+        ) {
+
+            throw new Error(
+                'Brak tablicy modules.'
+            );
+
+        }
+
+
+        state.scripts =
+            data.modules;
 
 
         renderCategories();
@@ -75,8 +132,7 @@ async function init() {
         renderScripts();
 
 
-        elements.status.textContent =
-            'Baza online';
+        updateStatus();
 
     } catch (error) {
 
@@ -94,7 +150,7 @@ async function init() {
 
             <div class="empty">
 
-                Nie udało się wczytać pliku
+                Nie udało się wczytać
 
                 <b>
                     data/scripts.json
@@ -105,6 +161,417 @@ async function init() {
         `;
 
     }
+
+}
+
+
+// ============================================================
+// LOADER BRIDGE
+// ============================================================
+
+function setupLoaderBridge() {
+
+    window.addEventListener(
+        'message',
+        event => {
+
+            if (
+                event.source !==
+                window
+            ) {
+
+                return;
+
+            }
+
+
+            const message =
+                event.data;
+
+
+            if (
+                !message
+                ||
+                typeof message !==
+                'object'
+            ) {
+
+                return;
+
+            }
+
+
+            // =================================================
+            // LOADER READY
+            // =================================================
+
+            if (
+                message.type ===
+                'TTI_HUB_LOADER_READY'
+            ) {
+
+                state.loaderConnected =
+                    true;
+
+
+                state.loaderVersion =
+                    message.loaderVersion || null;
+
+
+                requestSettings();
+
+
+                updateStatus();
+
+                renderScripts();
+
+
+                return;
+
+            }
+
+
+            // =================================================
+            // PONG
+            // =================================================
+
+            if (
+                message.type ===
+                'TTI_HUB_PONG'
+            ) {
+
+                state.loaderConnected =
+                    true;
+
+
+                state.loaderVersion =
+                    message.loaderVersion || null;
+
+
+                requestSettings();
+
+
+                updateStatus();
+
+                renderScripts();
+
+
+                return;
+
+            }
+
+
+            // =================================================
+            // SETTINGS
+            // =================================================
+
+            if (
+                message.type ===
+                'TTI_HUB_SETTINGS'
+            ) {
+
+                state.loaderConnected =
+                    true;
+
+
+                state.loaderVersion =
+                    message.loaderVersion || null;
+
+
+                state.moduleSettings =
+                    message.settings || {};
+
+
+                updateStatus();
+
+                renderScripts();
+
+
+                return;
+
+            }
+
+
+            // =================================================
+            // MODULE CHANGED
+            // =================================================
+
+            if (
+                message.type ===
+                'TTI_HUB_MODULE_CHANGED'
+            ) {
+
+                state.moduleSettings[
+                    message.moduleId
+                ] =
+                    Boolean(
+                        message.enabled
+                    );
+
+
+                renderScripts();
+
+                return;
+
+            }
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// PING LOADER
+// ============================================================
+
+function pingLoader() {
+
+    let answered =
+        false;
+
+
+    const previousState =
+        state.loaderConnected;
+
+
+    const handler =
+        event => {
+
+            const message =
+                event.data;
+
+
+            if (
+                message
+                &&
+                (
+                    message.type ===
+                    'TTI_HUB_PONG'
+
+                    ||
+
+                    message.type ===
+                    'TTI_HUB_LOADER_READY'
+                )
+            ) {
+
+                answered =
+                    true;
+
+
+                window.removeEventListener(
+                    'message',
+                    handler
+                );
+
+            }
+
+        };
+
+
+    window.addEventListener(
+        'message',
+        handler
+    );
+
+
+    window.postMessage(
+
+        {
+
+            type:
+                'TTI_HUB_PING'
+
+        },
+
+        '*'
+
+    );
+
+
+    setTimeout(
+        () => {
+
+            window.removeEventListener(
+                'message',
+                handler
+            );
+
+
+            if (!answered) {
+
+                state.loaderConnected =
+                    false;
+
+
+                if (
+                    previousState !==
+                    state.loaderConnected
+                ) {
+
+                    updateStatus();
+
+                    renderScripts();
+
+                }
+
+            }
+
+        },
+
+        LOADER_TIMEOUT
+
+    );
+
+}
+
+
+// ============================================================
+// REQUEST SETTINGS
+// ============================================================
+
+function requestSettings() {
+
+    window.postMessage(
+
+        {
+
+            type:
+                'TTI_HUB_GET_SETTINGS'
+
+        },
+
+        '*'
+
+    );
+
+}
+
+
+// ============================================================
+// CHANGE MODULE
+// ============================================================
+
+function setModuleState(
+    moduleId,
+    enabled
+) {
+
+    if (
+        !state.loaderConnected
+    ) {
+
+        alert(
+            'TTI Script Hub Loader nie został wykryty.\n\n' +
+            'Najpierw zainstaluj i włącz Loader w Tampermonkey.'
+        );
+
+        return;
+
+    }
+
+
+    window.postMessage(
+
+        {
+
+            type:
+                'TTI_HUB_SET_MODULE',
+
+            moduleId:
+                moduleId,
+
+            enabled:
+                Boolean(
+                    enabled
+                )
+
+        },
+
+        '*'
+
+    );
+
+
+    state.moduleSettings[
+        moduleId
+    ] =
+        Boolean(
+            enabled
+        );
+
+
+    renderScripts();
+
+}
+
+
+// ============================================================
+// MODULE STATE
+// ============================================================
+
+function isModuleEnabled(
+    script
+) {
+
+    if (
+        Object.prototype
+            .hasOwnProperty.call(
+                state.moduleSettings,
+                script.id
+            )
+    ) {
+
+        return Boolean(
+            state.moduleSettings[
+                script.id
+            ]
+        );
+
+    }
+
+
+    return Boolean(
+        script.enabledByDefault
+    );
+
+}
+
+
+// ============================================================
+// STATUS
+// ============================================================
+
+function updateStatus() {
+
+    if (
+        !state.loaderConnected
+    ) {
+
+        elements.status.textContent =
+            'Loader offline';
+
+
+        elements.status.style.color =
+            '#a13c2a';
+
+
+        return;
+
+    }
+
+
+    elements.status.textContent =
+        state.loaderVersion
+
+            ? `Loader v${state.loaderVersion} online`
+
+            : 'Loader online';
+
+
+    elements.status.style.color =
+        '#64811e';
 
 }
 
@@ -186,7 +653,7 @@ function renderCategories() {
 
 
 // ============================================================
-// FILTROWANIE
+// FILTER
 // ============================================================
 
 function getFilteredScripts() {
@@ -246,7 +713,7 @@ function getFilteredScripts() {
 
 
 // ============================================================
-// RENDEROWANIE SKRYPTÓW
+// RENDER
 // ============================================================
 
 function renderScripts() {
@@ -302,12 +769,18 @@ function renderScripts() {
 
 
 // ============================================================
-// KARTA SKRYPTU
+// CARD
 // ============================================================
 
 function createScriptCard(
     script
 ) {
+
+    const enabled =
+        isModuleEnabled(
+            script
+        );
+
 
     const card =
         document.createElement(
@@ -317,6 +790,15 @@ function createScriptCard(
 
     card.className =
         'card';
+
+
+    if (enabled) {
+
+        card.classList.add(
+            'module-enabled'
+        );
+
+    }
 
 
     const top =
@@ -387,6 +869,55 @@ function createScriptCard(
         script.description;
 
 
+    // ========================================================
+    // STATUS MODUŁU
+    // ========================================================
+
+    const moduleStatus =
+        document.createElement(
+            'div'
+        );
+
+
+    moduleStatus.className =
+        'module-status';
+
+
+    if (
+        !state.loaderConnected
+    ) {
+
+        moduleStatus.classList.add(
+            'offline'
+        );
+
+
+        moduleStatus.textContent =
+            '● LOADER OFFLINE';
+
+    } else if (enabled) {
+
+        moduleStatus.classList.add(
+            'enabled'
+        );
+
+
+        moduleStatus.textContent =
+            '● AKTYWNY';
+
+    } else {
+
+        moduleStatus.classList.add(
+            'disabled'
+        );
+
+
+        moduleStatus.textContent =
+            '○ WYŁĄCZONY';
+
+    }
+
+
     const meta =
         document.createElement(
             'div'
@@ -398,8 +929,12 @@ function createScriptCard(
 
 
     meta.textContent =
-        `Aktualizacja: ${script.updated}`;
+        `Moduł: ${script.file}`;
 
+
+    // ========================================================
+    // ACTIONS
+    // ========================================================
 
     const actions =
         document.createElement(
@@ -411,69 +946,56 @@ function createScriptCard(
         'actions';
 
 
-    // ========================================================
-    // INSTALUJ
-    // ========================================================
-
-    const installButton =
+    const toggleButton =
         document.createElement(
-            'a'
+            'button'
         );
 
 
-    installButton.className =
-        'btn';
+    toggleButton.className =
+        enabled
+            ? 'btn module-disable'
+            : 'btn module-enable';
 
 
-    installButton.textContent =
-        'Instaluj';
+    toggleButton.textContent =
+        enabled
+            ? 'Wyłącz'
+            : 'Włącz';
 
 
-    installButton.href =
-        script.file;
+    if (
+        !state.loaderConnected
+    ) {
+
+        toggleButton.textContent =
+            'Loader wymagany';
 
 
-    installButton.target =
-        '_blank';
+        toggleButton.disabled =
+            true;
+
+    }
 
 
-    installButton.rel =
-        'noopener noreferrer';
+    toggleButton.addEventListener(
+        'click',
+        () => {
+
+            setModuleState(
+
+                script.id,
+
+                !enabled
+
+            );
+
+        }
+    );
 
 
-    // ========================================================
-    // KOD
-    // ========================================================
-
-    const codeButton =
-        document.createElement(
-            'a'
-        );
-
-
-    codeButton.className =
-        'btn code';
-
-
-    codeButton.textContent =
-        'Kod';
-
-
-    codeButton.href =
-        script.file;
-
-
-    codeButton.target =
-        '_blank';
-
-
-    codeButton.rel =
-        'noopener noreferrer';
-
-
-    actions.append(
-        installButton,
-        codeButton
+    actions.appendChild(
+        toggleButton
     );
 
 
@@ -484,6 +1006,8 @@ function createScriptCard(
         title,
 
         description,
+
+        moduleStatus,
 
         meta,
 
@@ -498,7 +1022,7 @@ function createScriptCard(
 
 
 // ============================================================
-// WYSZUKIWARKA
+// SEARCH
 // ============================================================
 
 elements.search.addEventListener(
