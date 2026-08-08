@@ -24,8 +24,8 @@ body {
 
     background:
         linear-gradient(
-            rgba(255, 255, 255, 0.12),
-            rgba(255, 255, 255, 0.12)
+            rgba(255, 255, 255, 0.10),
+            rgba(255, 255, 255, 0.10)
         ),
         var(--bg);
 
@@ -36,18 +36,13 @@ body {
         Helvetica,
         sans-serif;
 
-    font-size: 14px;
+    font-size: 13px;
 }
-
-
-/* =========================================================
-   GŁÓWNY KONTENER
-   ========================================================= */
 
 .wrap {
     width: min(
-        1100px,
-        calc(100% - 28px)
+        1320px,
+        calc(100% - 32px)
     );
 
     margin-left: auto;
@@ -56,14 +51,14 @@ body {
 
 
 /* =========================================================
-   NAGŁÓWEK
+   HEADER
    ========================================================= */
 
 header {
     padding:
-        40px
+        26px
         0
-        34px;
+        22px;
 
     background:
         linear-gradient(
@@ -74,37 +69,37 @@ header {
     color: #fff4da;
 
     border-bottom:
-        4px solid
+        3px solid
         var(--gold);
 
     box-shadow:
         0
         3px
-        12px
-        rgba(0, 0, 0, 0.28);
+        10px
+        rgba(0, 0, 0, 0.25);
 }
 
 header small {
     color: #e3c37a;
 
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
 
-    letter-spacing: 2px;
+    letter-spacing: 1.8px;
 }
 
 header h1 {
     margin:
-        8px
+        6px
         0
-        5px;
+        4px;
 
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
-    font-size: 34px;
+    font-size: 28px;
     font-weight: 700;
 }
 
@@ -113,18 +108,18 @@ header p {
 
     color: #e8d5ad;
 
-    font-size: 14px;
+    font-size: 12px;
 }
 
 
 /* =========================================================
-   PANEL WYSZUKIWANIA
+   TOOLBAR
    ========================================================= */
 
 .toolbar {
-    margin-top: 22px;
+    margin-top: 16px;
 
-    padding: 14px;
+    padding: 11px;
 
     background: #f5e6bf;
 
@@ -132,18 +127,18 @@ header p {
         1px solid
         var(--line);
 
-    border-radius: 7px;
+    border-radius: 6px;
 
     box-shadow:
         0
         2px
-        7px
-        rgba(0, 0, 0, 0.10);
+        6px
+        rgba(0, 0, 0, 0.08);
 }
 
 
 /* =========================================================
-   WYSZUKIWARKA
+   SEARCH
    ========================================================= */
 
 #search {
@@ -152,14 +147,14 @@ header p {
     width: 100%;
 
     padding:
-        11px
-        13px;
+        8px
+        10px;
 
     border:
         1px solid
         #98713e;
 
-    border-radius: 5px;
+    border-radius: 4px;
 
     outline: none;
 
@@ -167,11 +162,7 @@ header p {
 
     color: var(--text);
 
-    font-size: 14px;
-
-    transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
+    font-size: 12px;
 }
 
 #search:focus {
@@ -182,12 +173,12 @@ header p {
         0
         0
         2px
-        rgba(111, 75, 37, 0.15);
+        rgba(111, 75, 37, 0.12);
 }
 
 
 /* =========================================================
-   KATEGORIE
+   CATEGORIES
    ========================================================= */
 
 #cats {
@@ -195,15 +186,15 @@ header p {
 
     flex-wrap: wrap;
 
-    gap: 7px;
+    gap: 6px;
 
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .cat {
     padding:
-        7px
-        11px;
+        5px
+        9px;
 
     border:
         1px solid
@@ -219,22 +210,14 @@ header p {
 
     color: white;
 
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
 
     cursor: pointer;
-
-    transition:
-        transform 0.1s ease,
-        filter 0.1s ease;
 }
 
 .cat:hover {
     filter: brightness(1.08);
-}
-
-.cat:active {
-    transform: translateY(1px);
 }
 
 .cat.on {
@@ -249,7 +232,7 @@ header p {
 
 
 /* =========================================================
-   STATUS BAZY
+   STATUS
    ========================================================= */
 
 .status {
@@ -259,12 +242,12 @@ header p {
     justify-content: space-between;
 
     padding:
-        13px
+        9px
         2px;
 
     color: #725c40;
 
-    font-size: 12px;
+    font-size: 11px;
 }
 
 #state {
@@ -275,7 +258,7 @@ header p {
 
 
 /* =========================================================
-   SIATKA SKRYPTÓW
+   GRID
    ========================================================= */
 
 .grid {
@@ -283,18 +266,18 @@ header p {
 
     grid-template-columns:
         repeat(
-            2,
+            3,
             minmax(0, 1fr)
         );
 
-    gap: 12px;
+    gap: 10px;
 
-    padding-bottom: 40px;
+    padding-bottom: 30px;
 }
 
 
 /* =========================================================
-   KARTA SKRYPTU
+   CARD
    ========================================================= */
 
 .card {
@@ -302,9 +285,9 @@ header p {
 
     flex-direction: column;
 
-    min-height: 220px;
+    min-height: 170px;
 
-    padding: 16px;
+    padding: 12px;
 
     background: var(--paper);
 
@@ -312,33 +295,33 @@ header p {
         1px solid
         var(--line);
 
-    border-radius: 7px;
+    border-radius: 6px;
 
     box-shadow:
         0
         2px
-        6px
-        rgba(0, 0, 0, 0.08);
+        5px
+        rgba(0, 0, 0, 0.07);
 
     transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
+        transform 0.12s ease,
+        box-shadow 0.12s ease;
 }
 
 .card:hover {
     transform:
-        translateY(-2px);
+        translateY(-1px);
 
     box-shadow:
         0
-        5px
-        14px
-        rgba(0, 0, 0, 0.14);
+        4px
+        10px
+        rgba(0, 0, 0, 0.12);
 }
 
 
 /* =========================================================
-   GÓRNA CZĘŚĆ KARTY
+   CARD TOP
    ========================================================= */
 
 .top {
@@ -347,20 +330,15 @@ header p {
     align-items: center;
     justify-content: space-between;
 
-    gap: 10px;
+    gap: 8px;
 }
-
-
-/* =========================================================
-   KATEGORIA
-   ========================================================= */
 
 .badge {
     display: inline-block;
 
     padding:
-        4px
-        7px;
+        3px
+        6px;
 
     background: #e4c989;
 
@@ -368,20 +346,15 @@ header p {
         1px solid
         #b58a43;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     color: #553817;
 
-    font-size: 10px;
+    font-size: 9px;
     font-weight: bold;
 
     text-transform: uppercase;
 }
-
-
-/* =========================================================
-   WERSJA
-   ========================================================= */
 
 .ver {
     color: #8c6236;
@@ -391,26 +364,26 @@ header p {
         Monaco,
         monospace;
 
-    font-size: 11px;
+    font-size: 10px;
 }
 
 
 /* =========================================================
-   NAZWA SKRYPTU
+   TITLE
    ========================================================= */
 
 .card h2 {
     margin:
-        13px
+        10px
         0
-        7px;
+        6px;
 
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 700;
 
     color: #3f2813;
@@ -418,7 +391,7 @@ header p {
 
 
 /* =========================================================
-   OPIS
+   DESCRIPTION
    ========================================================= */
 
 .desc {
@@ -427,20 +400,21 @@ header p {
     margin:
         0
         0
-        12px;
+        9px;
 
     color: var(--muted);
 
-    line-height: 1.45;
+    font-size: 11px;
+    line-height: 1.4;
 }
 
 
 /* =========================================================
-   INFORMACJE
+   META
    ========================================================= */
 
 .meta {
-    padding-top: 9px;
+    padding-top: 7px;
 
     border-top:
         1px solid
@@ -448,12 +422,12 @@ header p {
 
     color: #a15e35;
 
-    font-size: 10px;
+    font-size: 9px;
 }
 
 
 /* =========================================================
-   PRZYCISKI
+   ACTIONS
    ========================================================= */
 
 .actions {
@@ -461,17 +435,17 @@ header p {
 
     flex-wrap: wrap;
 
-    gap: 8px;
+    gap: 6px;
 
-    margin-top: 13px;
+    margin-top: 9px;
 }
 
 .btn {
     display: inline-block;
 
     padding:
-        9px
-        12px;
+        6px
+        9px;
 
     border:
         1px solid
@@ -489,22 +463,14 @@ header p {
 
     text-decoration: none;
 
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
 
     cursor: pointer;
-
-    transition:
-        filter 0.1s ease,
-        transform 0.1s ease;
 }
 
 .btn:hover {
     filter: brightness(1.1);
-}
-
-.btn:active {
-    transform: translateY(1px);
 }
 
 .btn.code {
@@ -519,14 +485,14 @@ header p {
 
 
 /* =========================================================
-   BRAK WYNIKÓW
+   EMPTY
    ========================================================= */
 
 .empty {
     grid-column:
         1 / -1;
 
-    padding: 45px;
+    padding: 32px;
 
     background: var(--paper);
 
@@ -534,7 +500,7 @@ header p {
         1px solid
         var(--line);
 
-    border-radius: 7px;
+    border-radius: 6px;
 
     color: var(--muted);
 
@@ -543,12 +509,12 @@ header p {
 
 
 /* =========================================================
-   STOPKA
+   FOOTER
    ========================================================= */
 
 footer {
     padding:
-        18px
+        12px
         0;
 
     background: #d8bf89;
@@ -559,28 +525,31 @@ footer {
 
     color: #6b5334;
 
-    font-size: 11px;
+    font-size: 10px;
 }
 
 
 /* =========================================================
-   TELEFON / MAŁE EKRANY
+   RESPONSIVE
    ========================================================= */
 
 @media (
-    max-width: 700px
+    max-width: 1000px
 ) {
 
-    header {
-        padding:
-            28px
-            0
-            25px;
+    .grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
     }
 
-    header h1 {
-        font-size: 27px;
-    }
+}
+
+@media (
+    max-width: 650px
+) {
 
     .grid {
         grid-template-columns:
@@ -594,7 +563,11 @@ footer {
         flex-direction:
             column;
 
-        gap: 5px;
+        gap: 4px;
+    }
+
+    header h1 {
+        font-size: 24px;
     }
 
 }
