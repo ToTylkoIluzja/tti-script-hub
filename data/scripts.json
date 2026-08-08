@@ -1,11 +1,14 @@
-[
-  {
-    "id": "interactive-map",
-    "name": "Interaktywna mapa obszaru",
-    "version": "1.3.0",
-    "category": "Mapa",
-    "description": "Interaktywna mapa do zaznaczania obszaru, importowania granic i liczenia wiosek w Plemionach.",
-    "updated": "2026-08-08",
-    "file": "scripts/interactive-map.user.js"
-  }
-]
+{
+  "hubVersion": "1.0.0",
+  "modules": [
+    {
+      "id": "interactive-map",
+      "name": "Interaktywna mapa obszaru",
+      "description": "Interaktywna mapa do zaznaczania obszaru i liczenia wiosek.",
+      "category": "Mapa",
+      "version": "1.3.0",
+      "file": "modules/interactive-map.js",
+      "enabledByDefault": false
+    }
+  ]
+}
