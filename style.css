@@ -1,0 +1,600 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #ead9ad;
+    --paper: #fff7df;
+    --brown: #553117;
+    --brown-dark: #47270f;
+    --gold: #c99b45;
+    --line: #c49a58;
+    --green: #648b1d;
+    --text: #352313;
+    --muted: #806f58;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            rgba(255, 255, 255, 0.12),
+            rgba(255, 255, 255, 0.12)
+        ),
+        var(--bg);
+
+    color: var(--text);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   GŁÓWNY KONTENER
+   ========================================================= */
+
+.wrap {
+    width: min(
+        1100px,
+        calc(100% - 28px)
+    );
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* =========================================================
+   NAGŁÓWEK
+   ========================================================= */
+
+header {
+    padding:
+        40px
+        0
+        34px;
+
+    background:
+        linear-gradient(
+            #70451f,
+            #47270f
+        );
+
+    color: #fff4da;
+
+    border-bottom:
+        4px solid
+        var(--gold);
+
+    box-shadow:
+        0
+        3px
+        12px
+        rgba(0, 0, 0, 0.28);
+}
+
+header small {
+    color: #e3c37a;
+
+    font-size: 11px;
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+header h1 {
+    margin:
+        8px
+        0
+        5px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 34px;
+    font-weight: 700;
+}
+
+header p {
+    margin: 0;
+
+    color: #e8d5ad;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   PANEL WYSZUKIWANIA
+   ========================================================= */
+
+.toolbar {
+    margin-top: 22px;
+
+    padding: 14px;
+
+    background: #f5e6bf;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius: 7px;
+
+    box-shadow:
+        0
+        2px
+        7px
+        rgba(0, 0, 0, 0.10);
+}
+
+
+/* =========================================================
+   WYSZUKIWARKA
+   ========================================================= */
+
+#search {
+    display: block;
+
+    width: 100%;
+
+    padding:
+        11px
+        13px;
+
+    border:
+        1px solid
+        #98713e;
+
+    border-radius: 5px;
+
+    outline: none;
+
+    background: #fffdf7;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+#search:focus {
+    border-color: #6f4b25;
+
+    box-shadow:
+        0
+        0
+        0
+        2px
+        rgba(111, 75, 37, 0.15);
+}
+
+
+/* =========================================================
+   KATEGORIE
+   ========================================================= */
+
+#cats {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 10px;
+}
+
+.cat {
+    padding:
+        7px
+        11px;
+
+    border:
+        1px solid
+        #6b4928;
+
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            #9d7547,
+            #76502d
+        );
+
+    color: white;
+
+    font-size: 11px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.1s ease,
+        filter 0.1s ease;
+}
+
+.cat:hover {
+    filter: brightness(1.08);
+}
+
+.cat:active {
+    transform: translateY(1px);
+}
+
+.cat.on {
+    background:
+        linear-gradient(
+            #7c9f2a,
+            #587a18
+        );
+
+    border-color: #4b6516;
+}
+
+
+/* =========================================================
+   STATUS BAZY
+   ========================================================= */
+
+.status {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding:
+        13px
+        2px;
+
+    color: #725c40;
+
+    font-size: 12px;
+}
+
+#state {
+    color: #64811e;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   SIATKA SKRYPTÓW
+   ========================================================= */
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+
+    padding-bottom: 40px;
+}
+
+
+/* =========================================================
+   KARTA SKRYPTU
+   ========================================================= */
+
+.card {
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 220px;
+
+    padding: 16px;
+
+    background: var(--paper);
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius: 7px;
+
+    box-shadow:
+        0
+        2px
+        6px
+        rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.card:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0
+        5px
+        14px
+        rgba(0, 0, 0, 0.14);
+}
+
+
+/* =========================================================
+   GÓRNA CZĘŚĆ KARTY
+   ========================================================= */
+
+.top {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   KATEGORIA
+   ========================================================= */
+
+.badge {
+    display: inline-block;
+
+    padding:
+        4px
+        7px;
+
+    background: #e4c989;
+
+    border:
+        1px solid
+        #b58a43;
+
+    border-radius: 10px;
+
+    color: #553817;
+
+    font-size: 10px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   WERSJA
+   ========================================================= */
+
+.ver {
+    color: #8c6236;
+
+    font-family:
+        Consolas,
+        Monaco,
+        monospace;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   NAZWA SKRYPTU
+   ========================================================= */
+
+.card h2 {
+    margin:
+        13px
+        0
+        7px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    color: #3f2813;
+}
+
+
+/* =========================================================
+   OPIS
+   ========================================================= */
+
+.desc {
+    flex: 1;
+
+    margin:
+        0
+        0
+        12px;
+
+    color: var(--muted);
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   INFORMACJE
+   ========================================================= */
+
+.meta {
+    padding-top: 9px;
+
+    border-top:
+        1px solid
+        #e2cda0;
+
+    color: #a15e35;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   PRZYCISKI
+   ========================================================= */
+
+.actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 13px;
+}
+
+.btn {
+    display: inline-block;
+
+    padding:
+        9px
+        12px;
+
+    border:
+        1px solid
+        #4c6517;
+
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            #7ca02a,
+            #587c17
+        );
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        filter 0.1s ease,
+        transform 0.1s ease;
+}
+
+.btn:hover {
+    filter: brightness(1.1);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn.code {
+    border-color: #654626;
+
+    background:
+        linear-gradient(
+            #967049,
+            #6f4d2e
+        );
+}
+
+
+/* =========================================================
+   BRAK WYNIKÓW
+   ========================================================= */
+
+.empty {
+    grid-column:
+        1 / -1;
+
+    padding: 45px;
+
+    background: var(--paper);
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius: 7px;
+
+    color: var(--muted);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   STOPKA
+   ========================================================= */
+
+footer {
+    padding:
+        18px
+        0;
+
+    background: #d8bf89;
+
+    border-top:
+        1px solid
+        #b78c4b;
+
+    color: #6b5334;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   TELEFON / MAŁE EKRANY
+   ========================================================= */
+
+@media (
+    max-width: 700px
+) {
+
+    header {
+        padding:
+            28px
+            0
+            25px;
+    }
+
+    header h1 {
+        font-size: 27px;
+    }
+
+    .grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .status {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap: 5px;
+    }
+
+}
